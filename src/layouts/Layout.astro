@@ -10,8 +10,8 @@ import "../styles/global.css";
     <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>
   <body id="app">
-    <div>
-      <Header />
+    <Header />
+    <div class="container">
       <slot />
     </div>
   </body>
@@ -20,5 +20,20 @@ import "../styles/global.css";
 <style>
   body {
     background-color: #e4edf3;
+  }
+
+  .container {
+    max-width: 1280px;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    margin-top: 25px;
+    margin-bottom: 25px;
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      margin: 25px 5%;
+    }
   }
 </style>
