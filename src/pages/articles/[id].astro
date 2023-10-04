@@ -1,0 +1,39 @@
+---
+import httpClient from "@/services/http-client";
+import Layout from "@/layouts/Layout.astro";
+import ArticleDetailTitle from "@/feature/article/detail/ArticleDetailTitle.astro";
+import Divider from "@/components/divider/Divider.astro";
+import ArticleDetailContent from "@/feature/article/detail/ArticleDetailContent.astro";
+import TagList from "@/feature/article/components/TagList";
+
+const { id } = Astro.params;
+const data = await httpClient.get(`/articles/${id}`);
+
+const { article } = data;
+---
+
+<Layout>
+  <div class="article-detail-container">
+    <ArticleDetailTitle {...article} />
+    <Divider />
+    <ArticleDetailContent {...article} />
+    <div class="tag-container">
+      <TagList tagList={article.tagList} />
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .article-detail-container {
+    background-color: white;
+    border-radius: 20px;
+    box-shadow:
+      0 10px 15px -3px rgb(0 0 0 / 0.1),
+      0 4px 6px -4px rgb(0 0 0 / 0.1);
+    padding: 20px;
+  }
+  .tag-container {
+    display: flex;
+    column-gap: 4px;
+  }
+</style>

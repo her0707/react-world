@@ -1,7 +1,7 @@
 import Article from "./Article";
 import type { Articles } from "@/types/article";
 import { container } from "./ArticleList.css";
-import TagList from "./TagList";
+import TagList from "./components/TagList";
 import ArticleSkeleton from "./skeleton/ArticleSkeleton";
 import { CONTENT_LIMIT } from "@/constants/pagination";
 
@@ -15,17 +15,18 @@ const ArticleList = ({ data, isLoading }: Props) => {
     <div className={container}>
       {isLoading
         ? new Array(CONTENT_LIMIT).fill(0).map((_, i) => <ArticleSkeleton key={`article-skeleton-${i}`} />)
-        : data.articles.map((v, i) => (
+        : data.articles.map((article, i) => (
             <Article
               key={`article-${i}`}
-              favorited={v.favorited}
-              favoritesCounts={v.favoritesCount}
-              imgSrc={v.author.image}
-              authorName={v.author.username}
-              createDate={v.createdAt}
-              title={v.title}
-              description={v.description}
-              tagComponent={<TagList tagList={v.tagList} />}
+              favorited={article.favorited}
+              favoritesCounts={article.favoritesCount}
+              imgSrc={article.author.image}
+              authorName={article.author.username}
+              createDate={article.createdAt}
+              title={article.title}
+              description={article.description}
+              tagComponent={<TagList tagList={article.tagList} />}
+              slug={article.slug}
             ></Article>
           ))}
     </div>

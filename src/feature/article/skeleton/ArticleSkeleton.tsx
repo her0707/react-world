@@ -1,30 +1,11 @@
 import Skeleton from "@/components/skeleton/Skeleton";
-import {
-  authorDescription,
-  authorImg,
-  container,
-  contentContainer,
-  titleContainer,
-  articleTitle,
-  author,
-  articleContent,
-  articleDate,
-  headerContainer,
-  articleTagContainer,
-} from "./ArticleSkeleton.css";
+import { container, contentContainer, articleTitle, articleContent, articleTagContainer } from "./ArticleSkeleton.css";
+import ArticleSkeletonTitle from "./ArticleSkeletonTitle";
 
 const ArticleSkeleton = () => {
   return (
     <div className={container}>
-      <div className={headerContainer}>
-        <div className={titleContainer}>
-          <Skeleton variant="circular" className={authorImg} />
-          <div className={authorDescription}>
-            <Skeleton variant="rounded" className={author} />
-            <Skeleton variant="rounded" className={articleDate} />
-          </div>
-        </div>
-      </div>
+      <ArticleSkeletonTitle />
 
       <a className={contentContainer}>
         <Skeleton variant="rounded" className={articleTitle} />

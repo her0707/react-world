@@ -1,13 +1,8 @@
 import {
-  authorDescription,
-  authorImg,
   container,
   contentContainer,
-  titleContainer,
   articleTitle,
-  author,
   articleContent,
-  articleDate,
   headerContainer,
   likeIcon,
   likeButton,
@@ -17,8 +12,8 @@ import {
 import SvgIcon from "@/components/SvgIcon";
 import LikeIcon from "@/assets/icons/like-icon.svg";
 
-import { formatDate } from "@/utils/date-format";
 import type { ReactNode } from "react";
+import ArticleAuthor from "./components/ArticleAuthor";
 
 interface Props {
   imgSrc: string;
@@ -29,6 +24,7 @@ interface Props {
   favorited: boolean;
   favoritesCounts: number;
   tagComponent: ReactNode;
+  slug: string;
 }
 
 const Article = ({
@@ -39,25 +35,20 @@ const Article = ({
   description,
   favorited,
   favoritesCounts,
+  slug,
   tagComponent,
 }: Props) => {
   return (
     <div className={container}>
       <div className={headerContainer}>
-        <div className={titleContainer}>
-          <img src={imgSrc} width={32} height={32} className={authorImg} />
-          <div className={authorDescription}>
-            <a className={author}>{authorName}</a>
-            <span className={articleDate}>{formatDate(createDate)}</span>
-          </div>
-        </div>
+        <ArticleAuthor imgSrc={imgSrc} authorName={authorName} createDate={createDate} />
         <button className={`${likeButton} ${favorited ? "active" : ""}`}>
           <SvgIcon src={LikeIcon.src} id="like-icon" className={likeIcon} />
           <span className={likeCount}>{favoritesCounts}</span>
         </button>
       </div>
 
-      <a className={contentContainer}>
+      <a className={contentContainer} href={`/articles/${slug}`}>
         <h5 className={articleTitle}>{title}</h5>
         <p className={articleContent}>{description}</p>
       </a>

@@ -1,0 +1,17 @@
+---
+interface Props {
+  body: string;
+}
+
+const { body } = Astro.props;
+---
+
+<div class="body-container">
+  {body}
+</div>
+
+<style>
+  .body-container {
+    margin-bottom: 20px;
+  }
+</style>
