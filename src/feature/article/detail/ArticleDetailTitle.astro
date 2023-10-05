@@ -1,7 +1,6 @@
 ---
 import type { Author } from "@/types/article";
-import ArticleAuthor from "../components/ArticleAuthor";
-import FavoriteButton from "../components/FavoriteButton";
+import ArticleHeader from "../components/ArticleHeader.astro";
 
 interface Props {
   title: string;
@@ -12,13 +11,12 @@ interface Props {
   favoritesCount: number;
   author: Author;
 }
-const { title, author, createdAt, favorited } = Astro.props;
+const { title } = Astro.props;
 ---
 
 <h1 class="article-title">{title}</h1>
 <div class="article-author-container">
-  <ArticleAuthor client:only="react" imgSrc={author.image} authorName={author.username} createDate={createdAt} />
-  <FavoriteButton client:only="react" isFollow={favorited} isLike={author.following} />
+  <ArticleHeader {...Astro.props} />
 </div>
 
 <style>

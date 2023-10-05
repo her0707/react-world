@@ -1,0 +1,19 @@
+---
+import type { Author } from "@/types/article";
+import ArticleAuthor from "./ArticleAuthor";
+import FavoriteButton from "./FavoriteButton";
+
+interface Props {
+  title: string;
+  createdAt: string;
+
+  updatedAt: string;
+  favorited: boolean;
+  favoritesCount: number;
+  author: Author;
+}
+const { author, createdAt, favorited } = Astro.props;
+---
+
+<ArticleAuthor client:only="react" imgSrc={author.image} authorName={author.username} createDate={createdAt} />
+<FavoriteButton client:only="react" isFollow={favorited} isLike={author.following} />

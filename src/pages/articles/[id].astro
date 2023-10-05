@@ -5,6 +5,7 @@ import ArticleDetailTitle from "@/feature/article/detail/ArticleDetailTitle.astr
 import Divider from "@/components/divider/Divider.astro";
 import ArticleDetailContent from "@/feature/article/detail/ArticleDetailContent.astro";
 import TagList from "@/feature/article/components/TagList";
+import ArticleHeader from "@/feature/article/components/ArticleHeader.astro";
 
 const { id } = Astro.params;
 const data = await httpClient.get(`/articles/${id}`);
@@ -19,6 +20,10 @@ const { article } = data;
     <ArticleDetailContent {...article} />
     <div class="tag-container">
       <TagList tagList={article.tagList} />
+    </div>
+    <Divider />
+    <div class="author-container">
+      <ArticleHeader {...article} />
     </div>
   </div>
 </Layout>
@@ -35,5 +40,9 @@ const { article } = data;
   .tag-container {
     display: flex;
     column-gap: 4px;
+  }
+  .author-container {
+    display: flex;
+    justify-content: center;
   }
 </style>
