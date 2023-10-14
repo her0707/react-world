@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 
 import type { Articles } from "@/types/article";
-import httpClient from "@/services/http-client";
+import { _get } from "@/services/http-client";
 import { makeSearchParams } from "@/utils/url";
 import { CONTENT_LIMIT } from "@/constants/pagination";
 
@@ -19,7 +19,7 @@ const useArticles = ({ data, page, tag }: Props) => {
   const getArticles = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await httpClient.get(
+      const response = await _get(
         `/articles?${makeSearchParams({
           offset: `${page * CONTENT_LIMIT}`,
           limit: `${CONTENT_LIMIT}`,

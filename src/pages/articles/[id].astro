@@ -1,5 +1,5 @@
 ---
-import httpClient from "@/services/http-client";
+import { _get } from "@/services/http-client";
 import Layout from "@/layouts/Layout.astro";
 import ArticleDetailTitle from "@/feature/article/detail/ArticleDetailTitle.astro";
 import Divider from "@/components/divider/Divider.astro";
@@ -8,7 +8,7 @@ import TagList from "@/feature/article/components/TagList";
 import ArticleHeader from "@/feature/article/components/ArticleHeader.astro";
 
 const { id } = Astro.params;
-const data = await httpClient.get(`/articles/${id}`);
+const data = await _get(`/articles/${id}`);
 
 const { article } = data;
 ---

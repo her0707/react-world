@@ -1,4 +1,4 @@
 export const API = {
-  ARTICLES: "/articles",
-  TAGS: "/tags",
+  ARTICLES: "/api/articles",
+  TAGS: "/api/tags",
 };

@@ -1,14 +1,14 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Main from "@/feature/content/Main";
-import HttpClient from "@/services/http-client";
+import { _get } from "@/services/http-client";
 import type { Articles } from "@/types/article";
 import type { Tags } from "@/types/tags";
 import { API } from "@/constants/api";
 import { CONTENT_LIMIT } from "@/constants/pagination";
 
-const data: Articles = await HttpClient.get(`${API.ARTICLES}?offset=0&limit=${CONTENT_LIMIT}`);
-const tags: Tags = await HttpClient.get(`${API.TAGS}`);
+const data: Articles = await _get(`${API.ARTICLES}?offset=0&limit=${CONTENT_LIMIT}`);
+const tags: Tags = await _get(`${API.TAGS}`);
 ---
 
 <Layout>
