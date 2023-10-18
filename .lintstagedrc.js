@@ -7,7 +7,7 @@ const buildEslintCommand = filenames => {
 
 const buildPrettierCommand = filenames => {
   const files = filenames.map(f => path.relative(process.cwd(), f)).join(" ");
-  return `prettier --check ${files} --plugin=prettier-plugin-astro`;
+  return `prettier --write ${files} --plugin=prettier-plugin-astro`;
 };
 
 module.exports = {

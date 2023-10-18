@@ -6,9 +6,11 @@ import Divider from "@/components/divider/Divider.astro";
 import ArticleDetailContent from "@/feature/article/detail/ArticleDetailContent.astro";
 import TagList from "@/feature/article/components/TagList";
 import ArticleHeader from "@/feature/article/components/ArticleHeader.astro";
+import { API } from "@/constants/api";
 
 const { id } = Astro.params;
-const data = await _get(`/articles/${id}`);
+
+const data = await _get(`${API.ARTICLES}/${id}`);
 
 const { article } = data;
 ---
