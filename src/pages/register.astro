@@ -4,15 +4,19 @@ import GlobalStyles from "@/components/GlobalStyles.astro";
 import Button from "@/components/button/Button";
 import { _post } from "@/services/http-client";
 import { API } from "@/constants/api";
-import { setUser } from "@/utils/auth";
 import { ROUTES } from "@/constants/routes";
+import { setUser } from "@/utils/auth";
 import type { RegisterError } from "@/types/auth";
 
-let errors = { email: "", password: "" };
+let errors = { username: "", email: "", password: "" };
 
 if (Astro.request.method === "POST") {
   try {
     const data = await Astro.request.formData();
+    const username = data.get("username");
+    if (!username) {
+      errors.username = "닉네임을 입력해주세요.";
+    }
     const email = data.get("email");
     if (!email) {
       errors.email = "이메일을 입력해주세요.";
@@ -28,14 +32,16 @@ if (Astro.request.method === "POST") {
 
     if (!isError) {
       const result = await _post(
-        API.LOGIN,
+        API.USERS,
         JSON.stringify({
           user: {
+            username,
             email,
             password,
           },
         }),
       );
+
       setUser(Astro, result);
 
       return Astro.redirect(ROUTES.INDEX);
@@ -49,6 +55,7 @@ if (Astro.request.method === "POST") {
         ...errors,
         email: errorObj.errors.email?.join(", ") || "",
         password: errorObj.errors.password?.join(", ") || "",
+        username: errorObj.errors.username?.join(", ") || "",
       };
     }
   }
@@ -64,6 +71,13 @@ if (Astro.request.method === "POST") {
     <GlobalStyles />
     <div class="container">
       <form method="POST">
+        <Input
+          name="username"
+          labelText="닉네임"
+          placeholder="닉네임을 입력하세요"
+          required="true"
+          errorMessage={errors.username}
+        />
         <Input
           name="email"
           labelText="이메일"
@@ -81,7 +95,7 @@ if (Astro.request.method === "POST") {
         />
 
         <Button type="submit" size="base" color="primary" rounded="base" width="full" client:only="react">
-          로그인
+          회원가입
         </Button>
       </form>
     </div>

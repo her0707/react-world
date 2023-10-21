@@ -38,6 +38,10 @@ export async function _get(url: string, options?: RequestInit) {
 
 export async function _post(url: string, data?: BodyInit | null, options?: Omit<RequestInit, "body">) {
   const response = await instance(url, makeCustomRequest("POST", options, data));
+
+  if (!response.ok) {
+    throw await response.json();
+  }
   return await response.json();
 }
 

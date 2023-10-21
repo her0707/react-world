@@ -6,45 +6,62 @@ import ClearIcon from "@/assets/icons/clear-icon.svg";
 
 interface Props extends HTMLAttributes<"input"> {
   labelText?: string;
+  errorMessage?: string;
 }
 
 const props = Astro.props;
 ---
 
-<label class="container" for={props.name}>
-  {props.labelText && <span class="label-text">{props.labelText}</span>}
-  <span class="input-container">
-    <input {...props} id="astro-input" />
+<astro-input data-name={props.name} class="container">
+  <label class="label" for={props.name}>
+    {props.labelText && <span class="label-text">{props.labelText}</span>}
+    <span class="input-container">
+      <input {...props} class="astro-input" />
 
-    <a class="clear-icon-button" id="clear-icon">
-      <Image src={ClearIcon} alt={"clear-icon"} width={20} height={20} />
-    </a>
-  </span>
-</label>
+      <a class="clear-icon-button" id="clear-icon">
+        <Image src={ClearIcon} alt={"clear-icon"} width={20} height={20} />
+      </a>
+    </span>
+    {props.errorMessage && <p class="error">{props.errorMessage}</p>}
+  </label>
+</astro-input>
 
 <script>
-  const clearIcon = document.getElementById("clear-icon");
-  const input = document.getElementById("astro-input") as HTMLInputElement;
-  input?.addEventListener("input", e => {
-    const { value } = e.target as HTMLInputElement;
-    if (value) {
-      clearIcon?.classList.add("visible");
-    } else {
-      clearIcon?.classList.remove("visible");
-    }
-  });
+  class AstroInput extends HTMLElement {
+    constructor() {
+      super();
 
-  clearIcon?.addEventListener("click", () => {
-    input.value = "";
-  });
+      const clearIcon = this.querySelector("#clear-icon");
+      const input = this.querySelector(`[name=${this.dataset.name}]`) as HTMLInputElement;
+
+      input?.addEventListener("input", e => {
+        const { value } = e.target as HTMLInputElement;
+        if (value) {
+          clearIcon?.classList.add("visible");
+        } else {
+          clearIcon?.classList.remove("visible");
+        }
+      });
+      clearIcon?.addEventListener("click", () => {
+        input.value = "";
+        clearIcon?.classList.remove("visible");
+      });
+    }
+  }
+
+  customElements.define("astro-input", AstroInput);
 </script>
 
 <style>
   .container {
+    background-color: #fff;
+    width: 100%;
+  }
+
+  .label {
     display: flex;
     flex-direction: column;
     row-gap: 4px;
-    background-color: #fff;
   }
 
   .label-text {
@@ -103,5 +120,11 @@ const props = Astro.props;
     width: 20px;
     height: 20px;
     color: #c3c5c9;
+  }
+
+  .error {
+    color: #ff2b2b;
+    font-size: 12px;
+    margin: 0;
   }
 </style>
