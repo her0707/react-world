@@ -15,17 +15,17 @@ if (Astro.request.method === "POST") {
     const data = await Astro.request.formData();
     const username = data.get("username");
     if (!username) {
-      errors.username = "닉네임을 입력해주세요.";
+      errors.username = "Username is Required";
     }
     const email = data.get("email");
     if (!email) {
-      errors.email = "이메일을 입력해주세요.";
+      errors.email = "Email is Required.";
     }
 
     const password = data.get("password");
 
     if (!password) {
-      errors.password = "비밀번호를 입력해주세요.";
+      errors.password = "Password is Required.";
     }
 
     const isError = Object.values(errors).some(message => message);
@@ -70,37 +70,58 @@ if (Astro.request.method === "POST") {
   <body id="app">
     <GlobalStyles />
     <div class="container">
-      <form method="POST">
+      <h1>Sign Up</h1>
+      <form method="POST" id="signup_form">
         <Input
           name="username"
-          labelText="닉네임"
-          placeholder="닉네임을 입력하세요"
+          id="username"
+          labelText="Username"
+          placeholder="Please input your username"
           required="true"
           errorMessage={errors.username}
         />
         <Input
           name="email"
-          labelText="이메일"
-          placeholder="이메일을 입력하세요"
+          id="email"
+          labelText="Email"
+          placeholder="Please input your email"
           required="true"
           errorMessage={errors.email}
         />
         <Input
+          id="password"
           name="password"
-          labelText="비밀번호"
-          placeholder="비밀번호를 입력하세요"
+          labelText="Password"
+          placeholder="Please input your password"
           required="true"
           type="password"
           errorMessage={errors.password}
         />
 
-        <Button type="submit" size="base" color="primary" rounded="base" width="full" client:only="react">
-          회원가입
+        <Button id="submit_btn" type="submit" size="base" color="primary" rounded="base" width="full" client:load>
+          Sign Up
         </Button>
       </form>
     </div>
   </body>
 </html>
+
+<script>
+  const form = document.getElementById("signup_form") as HTMLFormElement;
+
+  form?.addEventListener("submit", e => {
+    e.preventDefault();
+    const username = document.getElementById("username") as HTMLInputElement;
+    username.readOnly = true;
+    const email = document.getElementById("email") as HTMLInputElement;
+    email.readOnly = true;
+    const password = document.getElementById("password") as HTMLInputElement;
+    password.readOnly = true;
+    const submitBtn = document.getElementById("submit_btn") as HTMLButtonElement;
+    submitBtn.disabled = true;
+    form.submit();
+  });
+</script>
 
 <style>
   .container {
@@ -109,6 +130,8 @@ if (Astro.request.method === "POST") {
     align-items: center;
     width: 100%;
     height: 100vh;
+    row-gap: 40px;
+    flex-direction: column;
   }
 
   form {
@@ -118,5 +141,10 @@ if (Astro.request.method === "POST") {
     align-items: center;
     flex-direction: column;
     row-gap: 20px;
+  }
+  .error {
+    color: #ff2b2b;
+    font-size: 12px;
+    margin: 0;
   }
 </style>

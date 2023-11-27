@@ -3,6 +3,7 @@ export interface RegisterError {
     email?: string[];
     password?: string[];
     username?: string[];
+    "email or password"?: string[];
   };
 }
 

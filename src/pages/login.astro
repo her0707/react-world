@@ -8,20 +8,26 @@ import { setUser } from "@/utils/auth";
 import { ROUTES } from "@/constants/routes";
 import type { RegisterError } from "@/types/auth";
 
-let errors = { email: "", password: "" };
+interface LoginError {
+  email: string;
+  password: string;
+  emailOrPassword: string;
+}
 
+let errors: LoginError = { email: "", password: "", emailOrPassword: "" };
 if (Astro.request.method === "POST") {
   try {
     const data = await Astro.request.formData();
+
     const email = data.get("email");
     if (!email) {
-      errors.email = "이메일을 입력해주세요.";
+      errors.email = "Email is Required.";
     }
 
     const password = data.get("password");
 
     if (!password) {
-      errors.password = "비밀번호를 입력해주세요.";
+      errors.password = "Password is Required.";
     }
 
     const isError = Object.values(errors).some(message => message);
@@ -45,10 +51,12 @@ if (Astro.request.method === "POST") {
       console.error(error.message);
     } else if (error instanceof Object) {
       const errorObj = error as RegisterError;
+
       errors = {
         ...errors,
         email: errorObj.errors.email?.join(", ") || "",
         password: errorObj.errors.password?.join(", ") || "",
+        emailOrPassword: errorObj.errors["email or password"] ? "Email or Passowrd is invalid" : "",
       };
     }
   }
@@ -63,38 +71,58 @@ if (Astro.request.method === "POST") {
   <body id="app">
     <GlobalStyles />
     <div class="container">
-      <form method="POST">
+      <h1>Sign In</h1>
+      <form method="POST" id="login_form">
+        {errors.emailOrPassword && <p class="error">{errors.emailOrPassword}</p>}
         <Input
+          id="email"
           name="email"
-          labelText="이메일"
-          placeholder="이메일을 입력하세요"
+          labelText="Email"
+          placeholder="Please input your email"
           required="true"
           errorMessage={errors.email}
         />
         <Input
+          id="password"
           name="password"
-          labelText="비밀번호"
-          placeholder="비밀번호를 입력하세요"
+          labelText="Password"
+          placeholder="Please input your password"
           required="true"
           type="password"
           errorMessage={errors.password}
         />
-
-        <Button type="submit" size="base" color="primary" rounded="base" width="full" client:only="react">
-          로그인
+        <Button id="submit_btn" type="submit" size="base" color="primary" rounded="base" width="full" client:load>
+          Sign In
         </Button>
       </form>
     </div>
   </body>
 </html>
 
+<script>
+  const form = document.getElementById("login_form") as HTMLFormElement;
+
+  form?.addEventListener("submit", e => {
+    e.preventDefault();
+    const email = document.getElementById("email") as HTMLInputElement;
+    email.readOnly = true;
+    const password = document.getElementById("password") as HTMLInputElement;
+    password.readOnly = true;
+    const submitBtn = document.getElementById("submit_btn") as HTMLButtonElement;
+    submitBtn.disabled = true;
+    form.submit();
+  });
+</script>
+
 <style>
   .container {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 100%;
     height: 100vh;
+    row-gap: 40px;
   }
 
   form {
@@ -104,5 +132,11 @@ if (Astro.request.method === "POST") {
     align-items: center;
     flex-direction: column;
     row-gap: 20px;
+  }
+
+  .error {
+    color: #ff2b2b;
+    font-size: 12px;
+    margin: 0;
   }
 </style>
